@@ -1,0 +1,33 @@
+version: "3.8"
+
+services:
+  mariadb:
+    image: mariadb:11
+    container_name: estalvia-mariadb
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: root_pass
+      MARIADB_DATABASE: estalvia
+      MARIADB_USER: user
+      MARIADB_PASSWORD: pass
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  backend:
+    image: estalvia-backend
+    container_name: estalvia-backend
+    restart: always
+    depends_on:
+      - mariadb
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_DATASOURCE_URL: jdbc:mariadb://mariadb:3306/estalvia
+      SPRING_DATASOURCE_USERNAME: ivilla
+      SPRING_DATASOURCE_PASSWORD: 211280
+    ports:
+      - "8080:8080"
+
+volumes:
+  mariadb_data:
