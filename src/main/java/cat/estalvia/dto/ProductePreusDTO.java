@@ -5,64 +5,58 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ProductePreusDTO {
+   private Long producteId;
+   private String marca;
+   private String nombre;
+   private String unidad;
+   private String pack;
+   private Map<String, BigDecimal> precios = new HashMap();
 
-    private Long producteId;
-    private String marca;
-    private String nombre;
-    private String unidad;
-    private String pack;
+   public Long getProducteId() {
+      return this.producteId;
+   }
 
-    private Map<String, BigDecimal> precios = new HashMap<>();
+   public void setProducteId(Long producteId) {
+      this.producteId = producteId;
+   }
 
-	public Long getProducteId() {
-		return producteId;
-	}
+   public String getMarca() {
+      return this.marca;
+   }
 
-	public void setProducteId(Long producteId) {
-		this.producteId = producteId;
-	}
+   public void setMarca(String marca) {
+      this.marca = marca;
+   }
 
-	public String getMarca() {
-		return marca;
-	}
+   public String getNombre() {
+      return this.nombre;
+   }
 
-	public void setMarca(String marca) {
-		this.marca = marca;
-	}
+   public void setNombre(String nombre) {
+      this.nombre = nombre;
+   }
 
-	public String getNombre() {
-		return nombre;
-	}
+   public String getUnidad() {
+      return this.unidad;
+   }
 
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
+   public void setUnidad(String unidad) {
+      this.unidad = unidad;
+   }
 
-	public String getUnidad() {
-		return unidad;
-	}
+   public String getPack() {
+      return this.pack;
+   }
 
-	public void setUnidad(String unidad) {
-		this.unidad = unidad;
-	}
+   public void setPack(String pack) {
+      this.pack = pack;
+   }
 
-	public String getPack() {
-		return pack;
-	}
+   public Map<String, BigDecimal> getPrecios() {
+      return this.precios;
+   }
 
-	public void setPack(String pack) {
-		this.pack = pack;
-	}
-
-	public Map<String, BigDecimal> getPrecios() {
-		return precios;
-	}
-
-	public void setPrecios(Map<String, BigDecimal> precios) {
-		this.precios = precios;
-	}
-
-    // getters/setters
-    
-    
+   public void setPrecios(Map<String, BigDecimal> precios) {
+      this.precios = precios;
+   }
 }
