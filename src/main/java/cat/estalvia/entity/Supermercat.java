@@ -6,61 +6,65 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "supermercats")
+@Table(
+   name = "supermercats"
+)
 public class Supermercat {
+   @Id
+   @Column(
+      name = "supermercat_id"
+   )
+   private Long supermercatId;
+   @Column(
+      name = "nom"
+   )
+   private String nom;
+   @Column(
+      name = "web"
+   )
+   private String web;
+   @Column(
+      name = "actiu"
+   )
+   private Boolean actiu;
 
-    @Id
-    @Column(name = "supermercat_id") // Nombre exacto en la tabla del NAS
-    private Long supermercatId;
+   public Supermercat() {
+   }
 
-    @Column(name = "nom")
-    private String nom;
+   public Supermercat(Long supermercatId, String nom) {
+      this.supermercatId = supermercatId;
+      this.nom = nom;
+   }
 
-    @Column(name = "web")
-    private String web;
+   public Long getSupermercatId() {
+      return this.supermercatId;
+   }
 
-    @Column(name = "actiu")
-    private Boolean actiu;
+   public void setSupermercatId(Long supermercatId) {
+      this.supermercatId = supermercatId;
+   }
 
-    // Constructor vacío (obligatorio para JPA)
-    public Supermercat() {}
+   public String getNom() {
+      return this.nom;
+   }
 
-    // Constructor útil si quieres crear objetos con id y nombre
-    public Supermercat(Long supermercatId, String nom) {
-        this.supermercatId = supermercatId;
-        this.nom = nom;
-    }
+   public void setNom(String nom) {
+      this.nom = nom;
+   }
 
-    // Getters y Setters
-    public Long getSupermercatId() {
-        return supermercatId;
-    }
+   public String getWeb() {
+      return this.web;
+   }
 
-    public void setSupermercatId(Long supermercatId) {
-        this.supermercatId = supermercatId;
-    }
+   public void setWeb(String web) {
+      this.web = web;
+   }
 
-    public String getNom() {
-        return nom;
-    }
+   public Boolean getActiu() {
+      return this.actiu;
+   }
 
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
-
-    public String getWeb() {
-        return web;
-    }
-
-    public void setWeb(String web) {
-        this.web = web;
-    }
-
-    public Boolean getActiu() {
-        return actiu;
-    }
-
-    public void setActiu(Boolean actiu) {
-        this.actiu = actiu;
-    }
+   public void setActiu(Boolean actiu) {
+      this.actiu = actiu;
+   }
 }
