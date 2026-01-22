@@ -1,7 +1,7 @@
 package cat.estalvia.entity;
 
 import java.math.BigDecimal;
-
+import cat.estalvia.entity.Producte;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
