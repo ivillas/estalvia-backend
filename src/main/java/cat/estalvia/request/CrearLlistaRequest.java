@@ -2,12 +2,14 @@ package cat.estalvia.request;
 
 import java.util.List;
 
+import cat.estalvia.entity.Visibilitat;
+
 public class CrearLlistaRequest {
 
     private Long usuariId;
     private String nombre;
     private String descripcion;
-    private String visibilidad;
+    private Visibilitat visibilidad;
     private List<ItemLlistaRequest> items;
     
 
@@ -33,10 +35,10 @@ public class CrearLlistaRequest {
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
 	}
-	public String getVisibilidad() {
+	public Visibilitat getVisibilidad() {
 		return visibilidad;
 	}
-	public void setVisibilidad(String visibilidad) {
+	public void setVisibilidad(Visibilitat visibilidad) {
 		this.visibilidad = visibilidad;
 	}
 	public List<ItemLlistaRequest> getItems() {

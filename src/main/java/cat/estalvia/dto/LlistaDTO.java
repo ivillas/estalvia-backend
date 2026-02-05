@@ -3,12 +3,14 @@ package cat.estalvia.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import cat.estalvia.entity.Visibilitat;
+
 public class LlistaDTO {
 
     private Long listaId;
     private String nombre;
     private String descripcion;
-    private String visibilitat;
+    private Visibilitat visibilitat;
     private LocalDateTime dataCreacio;
     private List<ItemLlistaDTO> items;
     private String nomAutor;
@@ -32,10 +34,10 @@ public class LlistaDTO {
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
 	}
-	public String getVisibilitat() {
+	public Visibilitat getVisibilitat() {
 		return visibilitat;
 	}
-	public void setVisibilitat(String visibilitat) {
+	public void setVisibilitat(Visibilitat visibilitat) {
 		this.visibilitat = visibilitat;
 	}
 	public LocalDateTime getDataCreacio() {

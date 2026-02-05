@@ -44,8 +44,30 @@ public class Producte {
    private String descripcio;
    @Column(
       name = "last_update"
-   )
+   )   
    private LocalDateTime lastUpdate;
+   
+   @Column(name = "imatge")
+   private String imatge;
+
+   @Column(name = "envase")
+   private String envase;
+
+   public String getImatge() {
+	return imatge;
+}
+
+   public void setImatge(String imatge) {
+	this.imatge = imatge;
+   }
+
+   public String getEnvase() {
+	return envase;
+   }
+
+   public void setEnvase(String envase) {
+	this.envase = envase;
+   }
 
    public Long getProducteId() {
       return this.producteId;

@@ -10,6 +10,10 @@ public class ProductePreusDTO {
    private String nombre;
    private String unidad;
    private String pack;
+   private String descripcio;
+   private String imatge;
+   private java.time.LocalDateTime lastUpdate;
+   private String envase;
    private Map<String, BigDecimal> precios = new HashMap();
 
    public Long getProducteId() {
@@ -59,4 +63,40 @@ public class ProductePreusDTO {
    public void setPrecios(Map<String, BigDecimal> precios) {
       this.precios = precios;
    }
+
+   public String getDescripcio() {
+	return descripcio;
+   }
+
+   public void setDescripcio(String descripcio) {
+	this.descripcio = descripcio;
+   }
+
+   public String getImatge() {
+	return imatge;
+   }
+
+   public void setImatge(String imatge) {
+	this.imatge = imatge;
+   }
+
+   public java.time.LocalDateTime getLastUpdate() {
+	return lastUpdate;
+   }
+
+   public void setLastUpdate(java.time.LocalDateTime lastUpdate) {
+	this.lastUpdate = lastUpdate;
+   }
+
+   public String getEnvase() {
+	return envase;
+   }
+
+   public void setEnvase(String envase) {
+	this.envase = envase;
+   }
+   
+   
+   
+   
 }

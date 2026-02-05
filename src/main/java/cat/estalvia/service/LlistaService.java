@@ -3,9 +3,11 @@ package cat.estalvia.service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import cat.estalvia.dto.ItemLlistaDTO;
@@ -15,13 +17,13 @@ import cat.estalvia.entity.Llista;
 import cat.estalvia.entity.Producte;
 import cat.estalvia.entity.Supermercat;
 import cat.estalvia.entity.Usuari;
+import cat.estalvia.entity.Visibilitat;
 import cat.estalvia.repository.LlistaRepository;
 import cat.estalvia.repository.ProducteRepository;
 import cat.estalvia.repository.SupermercatRepository;
 import cat.estalvia.repository.UsuariRepository;
 import cat.estalvia.request.CrearLlistaRequest;
 import cat.estalvia.request.ItemLlistaRequest;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
@@ -47,7 +49,7 @@ public class LlistaService {
 
     public Llista crearLlista(CrearLlistaRequest req) {
     	
-        if (!VISIBILITATS_VALIDES.contains(req.getVisibilidad())) {
+        if (req.getVisibilidad() == null || !VISIBILITATS_VALIDES.contains(req.getVisibilidad().name())) {
             throw new ResponseStatusException(
                 HttpStatus.BAD_REQUEST,
                 "Visibilitat inválida. Valores permitidos: PUBLICA, PRIVADA"
@@ -60,7 +62,7 @@ public class LlistaService {
         Llista llista = new Llista();
         llista.setNombre(req.getNombre());
         llista.setDescripcion(req.getDescripcion());
-        llista.setVisibilitat(req.getVisibilidad());
+        llista.setVisibilitat(req.getVisibilidad().name());
         llista.setUsuari(usuari);
         llista.setDataCreacio(LocalDateTime.now());
 
@@ -89,9 +91,15 @@ public class LlistaService {
     }
     
 
-
+    public List<LlistaDTO> obtenirPubliques() {
+        // Pasamos el Enum como String para el SQL nativo
+        List<Llista> llistes = llistaRepo.findByVisibilitat(Visibilitat.PUBLICA.name());
+        return llistes.stream().map(this::toDTO).collect(Collectors.toList());
+    }
+    
+    
     public List<Llista> obtenirLlistesUsuari(Long userId) {
-        // Cambia el nombre para que coincida con el repositorio
+        // Cambiamos UsuariId por UserId para que coincida con el @Query del repositorio
         return llistaRepo.findByUsuari_UserId(userId);
     }
     
@@ -103,7 +111,7 @@ public class LlistaService {
         dto.setListaId(llista.getListaId()); 
         dto.setNombre(llista.getNombre());
         dto.setDescripcion(llista.getDescripcion());
-        dto.setVisibilitat(llista.getVisibilitat());
+        dto.setVisibilitat(Visibilitat.valueOf(llista.getVisibilitat()));
         dto.setDataCreacio(llista.getDataCreacio());
         dto.setNomAutor(llista.getUsuari().getUsername());
 
@@ -127,18 +135,12 @@ public class LlistaService {
         return dto;
     }
     
- // Obtener públicas de todos
-    public List<LlistaDTO> obtenirPubliques() {
-        return llistaRepo.findByVisibilitat("PUBLICA").stream()
-                .map(this::toDTO)
-                .toList();
-    }
     
  // Contadores para el panel
     public Map<String, Long> estadistiquesUsuari(Long userId) {
         return Map.of(
-            "publiques", llistaRepo.countByUsuari_UserIdAndVisibilitat(userId, "PUBLICA"),
-            "privades", llistaRepo.countByUsuari_UserIdAndVisibilitat(userId, "PRIVADA")
+            "publiques", llistaRepo.countByUsuari_UserIdAndVisibilitat(userId, Visibilitat.PUBLICA.name()),
+            "privades", llistaRepo.countByUsuari_UserIdAndVisibilitat(userId, Visibilitat.PRIVADA.name())
         );
     }
     

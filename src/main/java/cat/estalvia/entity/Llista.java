@@ -35,9 +35,8 @@ public class Llista {
 
     private String descripcion;
 
-    @Column(name = "visibilitat", nullable = false)
-    @JdbcTypeCode(Types.VARCHAR)
-    private String visibilitat;
+    @Column(name = "visibilitat")
+    private String visibilitat; 
 
     @ManyToOne
     @JoinColumn(name = "usuari_id", nullable = false)

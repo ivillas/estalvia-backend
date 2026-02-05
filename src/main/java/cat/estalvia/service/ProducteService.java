@@ -1,6 +1,7 @@
 package cat.estalvia.service;
 
 
+
 import cat.estalvia.dto.ProductePreusDTO;
 import cat.estalvia.repository.ProducteRepository;
 import java.math.BigDecimal;
@@ -20,26 +21,33 @@ public class ProducteService {
    }
 
    public List<ProductePreusDTO> getProductosConPrecios() {
-      Map<Long, ProductePreusDTO> map = new LinkedHashMap();
-      Iterator var2 = this.repository.findAllWithPrices().iterator();
+	    Map<Long, ProductePreusDTO> map = new LinkedHashMap<>();
+	    List<Object[]> results = this.repository.findAllWithPrices();
 
-      while(var2.hasNext()) {
-         Object[] row = (Object[])var2.next();
-         Long id = (Long)row[0];
-         ProductePreusDTO dto = (ProductePreusDTO)map.computeIfAbsent(id, (k) -> {
-            ProductePreusDTO d = new ProductePreusDTO();
-            d.setProducteId(id);
-            d.setMarca((String)row[1]);
-            d.setNombre((String)row[2]);
-            d.setUnidad((String)row[3]);
-            d.setPack((String)row[4]);
-            return d;
-         });
-         String supermercado = (String)row[5];
-         BigDecimal precio = (BigDecimal)row[6];
-         dto.getPrecios().put(supermercado, precio);
-      }
+	    for (Object[] row : results) {
+	        Long id = (Long) row[0]; // Usamos el nombre del campo en la clase Producte
+	        
+	        ProductePreusDTO dto = map.computeIfAbsent(id, k -> {
+	            ProductePreusDTO d = new ProductePreusDTO();
+	            d.setProducteId(id);
+	            d.setMarca((String) row[1]);
+	            d.setNombre((String) row[2]);
+	            d.setUnidad((String) row[3]);
+	            d.setPack((String) row[4]);
+	            
+	            // Campos nuevos
+	            d.setDescripcio((String) row[7]);
+	            d.setImatge((String) row[8]);
+	            d.setLastUpdate((java.time.LocalDateTime) row[9]);
+	            d.setEnvase((String) row[10]);
+	            
+	            return d;
+	        });
 
-      return new ArrayList(map.values());
-   }
+	        String supermercado = (String) row[5];
+	        java.math.BigDecimal precio = (java.math.BigDecimal) row[6];
+	        dto.getPrecios().put(supermercado, precio);
+	    }
+	    return new ArrayList<>(map.values());
+	}
 }
