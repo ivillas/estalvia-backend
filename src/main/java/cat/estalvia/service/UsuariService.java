@@ -19,14 +19,29 @@ public class UsuariService {
         this.llistaRepo = llistaRepo;
     }
 
+    // Método para el conteo que usará el Controller
+    public long contarTodos() {
+        // Llamamos al método de la @Query nativa que creaste
+        return usuariRepo.countUsuarios();
+    }
+
     @Transactional
     public void eliminarCuenta(Long userId, String modo) {
+        // 1. Verificación de seguridad
+        if (!usuariRepo.existsById(userId)) {
+            throw new RuntimeException("Usuario no encontrado");
+        }
+
+        // 2. Lógica de listas según el modo
         if ("todo".equalsIgnoreCase(modo)) {
             llistaRepo.deleteByUsuariId(userId);
         } else if ("solo_privadas".equalsIgnoreCase(modo)) {
             llistaRepo.deleteByUsuariIdAndVisibilitat(userId, Visibilitat.PRIVADA.name());
-            llistaRepo.reassignPublicLists(userId, 1L);
+            // Usamos la constante definida arriba
+            llistaRepo.reassignPublicLists(userId, USER_SISTEMA_ID);
         }
+
+        // 3. Borrado final del usuario
         usuariRepo.deleteById(userId);
     }
 }

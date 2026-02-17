@@ -40,4 +40,9 @@ public interface LlistaRepository extends JpaRepository<Llista, Long> {
     @Transactional
     @Query(value = "UPDATE llistes SET usuari_id = :nuevoId WHERE usuari_id = :viejoId AND visibilitat = 'PUBLICA'", nativeQuery = true)
     void reassignPublicLists(@Param("viejoId") Long viejoId, @Param("nuevoId") Long nuevoId);
+ 
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM llistes WHERE llista_id = :llistaId AND usuari_id = :userId", nativeQuery = true)
+    void deleteByIdAndUsuariId(@Param("llistaId") Long llistaId, @Param("userId") Long userId);
 }

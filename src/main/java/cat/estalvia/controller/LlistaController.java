@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,11 +49,23 @@ public class LlistaController {
     public ResponseEntity<List<LlistaDTO>> getPubliques() {
         return ResponseEntity.ok(llistaService.obtenirPubliques());
     }
+    
+    @GetMapping("/privades/stats")
+    public ResponseEntity<Integer> getPrivadesStats() {
+        // Eliminamos el paréntesis extra: .TotalPrivades()
+        return ResponseEntity.ok(llistaService.TotalPrivades());
+    }
 
     
     
     @GetMapping("/stats/{userId}")
     public ResponseEntity<Map<String, Long>> getStats(@PathVariable Long userId) {
         return ResponseEntity.ok(llistaService.estadistiquesUsuari(userId));
+    }
+    
+    @DeleteMapping("/{id}/{usuariId}")
+    public ResponseEntity<Void> eliminarLlista(@PathVariable Long id, @PathVariable Long usuariId) {
+        llistaService.eliminarLlistaSegura(id, usuariId);
+        return ResponseEntity.noContent().build();
     }
 }

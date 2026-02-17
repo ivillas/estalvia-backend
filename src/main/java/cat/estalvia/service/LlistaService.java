@@ -97,6 +97,12 @@ public class LlistaService {
         return llistes.stream().map(this::toDTO).collect(Collectors.toList());
     }
     
+    public int TotalPrivades() {
+        // Retornamos el tamaño de la lista de privadas para obtener el número total
+        List<Llista> llistes = llistaRepo.findByVisibilitat(Visibilitat.PRIVADA.name());
+        return llistes.size();
+    }
+    
     
     public List<Llista> obtenirLlistesUsuari(Long userId) {
         // Cambiamos UsuariId por UserId para que coincida con el @Query del repositorio
@@ -144,8 +150,11 @@ public class LlistaService {
         );
     }
     
-    
-    
+
+    public void eliminarLlistaSegura(Long llistaId, Long usuariId) {
+        // CAMBIA LlistaRepository por llistaRepo
+        llistaRepo.deleteByIdAndUsuariId(llistaId, usuariId);
+    }
     
     
 }
