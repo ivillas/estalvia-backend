@@ -7,41 +7,53 @@ import cat.estalvia.repository.LlistaRepository;
 import cat.estalvia.repository.UsuariRepository;
 import jakarta.transaction.Transactional;
 
+/**
+ * Clase Service per la contrasenya
+ */
+
 @Service
 public class UsuariService {
 
-    private final UsuariRepository usuariRepo;
-    private final LlistaRepository llistaRepo;
-    private static final Long USER_SISTEMA_ID = 1L;
+	private final UsuariRepository usuariRepo;
+	private final LlistaRepository llistaRepo;
+	private static final Long USER_SISTEMA_ID = 1L;
 
-    public UsuariService(UsuariRepository usuariRepo, LlistaRepository llistaRepo) {
-        this.usuariRepo = usuariRepo;
-        this.llistaRepo = llistaRepo;
-    }
+	public UsuariService(UsuariRepository usuariRepo, LlistaRepository llistaRepo) {
+		this.usuariRepo = usuariRepo;
+		this.llistaRepo = llistaRepo;
+	}
 
-    // Método para el conteo que usará el Controller
-    public long contarTodos() {
-        // Llamamos al método de la @Query nativa que creaste
-        return usuariRepo.countUsuarios();
-    }
+	/**
+	 * Metode per coneixer el nombre d'usuaris
+	 * @return numero total d'usuaris registrats
+	 */
+	public long contarTodos() {
+		return usuariRepo.countUsuarios();
+	}
 
-    @Transactional
-    public void eliminarCuenta(Long userId, String modo) {
-        // 1. Verificación de seguridad
-        if (!usuariRepo.existsById(userId)) {
-            throw new RuntimeException("Usuario no encontrado");
-        }
 
-        // 2. Lógica de listas según el modo
-        if ("todo".equalsIgnoreCase(modo)) {
-            llistaRepo.deleteByUsuariId(userId);
-        } else if ("solo_privadas".equalsIgnoreCase(modo)) {
-            llistaRepo.deleteByUsuariIdAndVisibilitat(userId, Visibilitat.PRIVADA.name());
-            // Usamos la constante definida arriba
-            llistaRepo.reassignPublicLists(userId, USER_SISTEMA_ID);
-        }
+	/**
+	 * Metode per eliminar un compte
+	 * @param userId
+	 * @param modo (tot o deixar les llistes publiques publicades)
+	 */
+	@Transactional
+	public void eliminarCuenta(Long userId, String modo) {
+		// Verifiquem l'usuari
+		if (!usuariRepo.existsById(userId)) {
+			throw new RuntimeException("Usuario no trobat");
+		}
 
-        // 3. Borrado final del usuario
-        usuariRepo.deleteById(userId);
-    }
+		// llogica segons el mode d'eliminacio
+		if ("todo".equalsIgnoreCase(modo)) {
+			llistaRepo.deleteByUsuariId(userId);
+		} else if ("solo_privadas".equalsIgnoreCase(modo)) {
+			llistaRepo.deleteByUsuariIdAndVisibilitat(userId, Visibilitat.PRIVADA.name());
+			// per cambiar les llistes publiques
+			llistaRepo.reassignPublicLists(userId, USER_SISTEMA_ID);
+		}
+
+		// borrem l'usuari al final
+		usuariRepo.deleteById(userId);
+	}
 }

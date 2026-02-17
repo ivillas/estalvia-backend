@@ -7,22 +7,28 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Clase per gestionar les peticions dels supermercats
+ */
+
 @RestController
 @RequestMapping({"/api/supermercats"})
 public class SupermercatController {
-   private final SupermercatService service;
+	private final SupermercatService service;
 
-   public SupermercatController(SupermercatService service) {
-      this.service = service;
-   }
+	public SupermercatController(SupermercatService service) {
+		this.service = service;
+	}
 
-   @GetMapping
-   public List<SupermercatsDTO> getSupermercats() {
-      return this.service.getAllSupermercats();
-   }
 
-   @GetMapping({"/ping"})
-   public String ping() {
-      return "OK";
-   }
+	/**
+	 * PEr obtenir la llista de supermercats disponibles
+	 * @return llista DTO supermercats
+	 */
+
+	@GetMapping
+	public List<SupermercatsDTO> getSupermercats() {
+		return this.service.getAllSupermercats();
+	}
+
 }

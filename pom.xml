@@ -52,14 +52,6 @@
     <version>0.4</version>
 </dependency>
 
-        <!-- 🔐 (más adelante) -->
-        <!--
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-        -->
-
         <!-- 🧪 Tests -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

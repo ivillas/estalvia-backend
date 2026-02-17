@@ -7,18 +7,27 @@ import org.springframework.web.bind.annotation.RestController;
 import cat.estalvia.dto.ProducteStatusDTO;
 import cat.estalvia.service.ProducteStatusService;
 
+/**
+ * Controller nomes d'informacio de l'app
+ */
+
 @RestController
 @RequestMapping("/api/status")
 public class StatusController {
 
-    private final ProducteStatusService service;
+	private final ProducteStatusService service;
 
-    public StatusController(ProducteStatusService service) {
-        this.service = service;
-    }
+	public StatusController(ProducteStatusService service) {
+		this.service = service;
+	}
 
-    @GetMapping("/productes")
-    public ProducteStatusDTO getProducteStatus() {
-        return new ProducteStatusDTO(service.getLastProducteUpdate());
-    }
+	/**
+	 * PEr coneixer la data de l'ultim producte afegit o modificat
+	 * @return data
+	 */
+
+	@GetMapping("/productes")
+	public ProducteStatusDTO getProducteStatus() {
+		return new ProducteStatusDTO(service.getLastProducteUpdate());
+	}
 }

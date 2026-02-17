@@ -9,29 +9,34 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDateTime;
 
+
+/**
+ * Entitat Preus Historics
+ */
+
 @Entity
 @Table(
-   name = "preus_historic"
-)
+		name = "preus_historic"
+		)
 public class PreusHistoric {
-    @Id
-    @Column(name = "id", nullable=false)
-    private Long id;
-   
-    @Column(name = "producte_id", nullable=false)
-    private Long producte_id;
-    
-    @Column(name = "supermercat_id", nullable=false)
-    private Long supermercat_id;
-   
+	@Id
+	@Column(name = "id", nullable=false)
+	private Long id;
+
+	@Column(name = "producte_id", nullable=false)
+	private Long producte_id;
+
+	@Column(name = "supermercat_id", nullable=false)
+	private Long supermercat_id;
+
 	@Column(name="preu", precision =10, scale= 2, nullable=false, unique=false)
 	private BigDecimal  preu;
-	
+
 	@Column(name = "data_preu", nullable=true,unique=false)
 	private LocalDateTime  data_preu;
-	
-    @Column(name = "font_id", nullable=false)
-    private Long font_id;
+
+	@Column(name = "font_id", nullable=false)
+	private Long font_id;
 
 	public Long getId() {
 		return id;
@@ -80,9 +85,9 @@ public class PreusHistoric {
 	public void setFont_id(Long font_id) {
 		this.font_id = font_id;
 	}
-	
-	
- 
-    
-  
+
+
+
+
+
 }

@@ -2,16 +2,23 @@ package cat.estalvia.request;
 
 import java.math.BigDecimal;
 
+
+/**
+ * Request dels items dels productes de les llistes
+ */
+
+
 public class ItemLlistaRequest {
 
-    private Long productoId;
-    private BigDecimal cantidad;
-    private String unidad;
-    private Long supermercadoPreferidoId; // opcional
-    
-    
-    
-    
+	private Long productoId;
+	private BigDecimal cantidad;
+	private String unidad;
+	private Long supermercadoPreferidoId;
+
+
+	// getters & setters
+
+
 	public Long getProductoId() {
 		return productoId;
 	}
@@ -37,9 +44,8 @@ public class ItemLlistaRequest {
 		this.supermercadoPreferidoId = supermercadoPreferidoId;
 	}
 
-    // getters & setters
-    
-    
-    
-    
+
+
+
+
 }

@@ -4,19 +4,21 @@ import java.util.List;
 
 import cat.estalvia.entity.Visibilitat;
 
+/**
+ * Request de Crear llista
+ */
+
 public class CrearLlistaRequest {
 
-    private Long usuariId;
-    private String nombre;
-    private String descripcion;
-    private Visibilitat visibilidad;
-    private List<ItemLlistaRequest> items;
-    
+	private Long usuariId;
+	private String nombre;
+	private String descripcion;
+	private Visibilitat visibilidad;
+	private List<ItemLlistaRequest> items;
 
-    // getters & setters
-    
-    
-    
+	// getters & setters
+
+
 	public Long getUsuariId() {
 		return usuariId;
 	}
@@ -48,5 +50,5 @@ public class CrearLlistaRequest {
 		this.items = items;
 	}
 
-    
+
 }

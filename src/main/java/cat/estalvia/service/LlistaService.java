@@ -25,136 +25,172 @@ import cat.estalvia.repository.UsuariRepository;
 import cat.estalvia.request.CrearLlistaRequest;
 import cat.estalvia.request.ItemLlistaRequest;
 
+/**
+ * Clase Service per les llistes
+ */
+
 @Service
 @Transactional
 public class LlistaService {
 
-    private final LlistaRepository llistaRepo;
-    private final UsuariRepository usuariRepo;
-    private final ProducteRepository producteRepo;
-    private final SupermercatRepository supermercatRepo;
-    private static final List<String> VISIBILITATS_VALIDES = List.of("PUBLICA", "PRIVADA");
+	private final LlistaRepository llistaRepo;
+	private final UsuariRepository usuariRepo;
+	private final ProducteRepository producteRepo;
+	private final SupermercatRepository supermercatRepo;
+	private static final List<String> VISIBILITATS_VALIDES = List.of("PUBLICA", "PRIVADA");
 
-    public LlistaService(
-            LlistaRepository llistaRepo,
-            UsuariRepository usuariRepo,
-            ProducteRepository producteRepo,
-            SupermercatRepository supermercatRepo) {
+	public LlistaService(
+			LlistaRepository llistaRepo,
+			UsuariRepository usuariRepo,
+			ProducteRepository producteRepo,
+			SupermercatRepository supermercatRepo) {
 
-        this.llistaRepo = llistaRepo;
-        this.usuariRepo = usuariRepo;
-        this.producteRepo = producteRepo;
-        this.supermercatRepo = supermercatRepo;
-    }
+		this.llistaRepo = llistaRepo;
+		this.usuariRepo = usuariRepo;
+		this.producteRepo = producteRepo;
+		this.supermercatRepo = supermercatRepo;
+	}
 
-    public Llista crearLlista(CrearLlistaRequest req) {
-    	
-        if (req.getVisibilidad() == null || !VISIBILITATS_VALIDES.contains(req.getVisibilidad().name())) {
-            throw new ResponseStatusException(
-                HttpStatus.BAD_REQUEST,
-                "Visibilitat inválida. Valores permitidos: PUBLICA, PRIVADA"
-            );
-        }
+	/**
+	 * Metode per crear una llista
+	 * @param req
+	 * @return
+	 */
 
-        Usuari usuari = usuariRepo.findById(req.getUsuariId())
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+	public Llista crearLlista(CrearLlistaRequest req) {
 
-        Llista llista = new Llista();
-        llista.setNombre(req.getNombre());
-        llista.setDescripcion(req.getDescripcion());
-        llista.setVisibilitat(req.getVisibilidad().name());
-        llista.setUsuari(usuari);
-        llista.setDataCreacio(LocalDateTime.now());
+		if (req.getVisibilidad() == null || !VISIBILITATS_VALIDES.contains(req.getVisibilidad().name())) {
+			throw new ResponseStatusException(
+					HttpStatus.BAD_REQUEST,
+					"Visibilitat inválida. Valores permitidos: PUBLICA, PRIVADA"
+					);
+		}
 
-        for (ItemLlistaRequest itemReq : req.getItems()) {
+		Usuari usuari = usuariRepo.findById(req.getUsuariId())
+				.orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-            Producte producte = producteRepo.findById(itemReq.getProductoId())
-                    .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+		Llista llista = new Llista();
+		llista.setNombre(req.getNombre());
+		llista.setDescripcion(req.getDescripcion());
+		llista.setVisibilitat(req.getVisibilidad().name());
+		llista.setUsuari(usuari);
+		llista.setDataCreacio(LocalDateTime.now());
 
-            ItemLlista item = new ItemLlista();
-            item.setLlista(llista);
-            item.setProducte(producte);
-            item.setQuantitat(itemReq.getCantidad());
-            item.setUnitat(itemReq.getUnidad());
+		for (ItemLlistaRequest itemReq : req.getItems()) {
 
-            if (itemReq.getSupermercadoPreferidoId() != null) {
-                Supermercat s = supermercatRepo
-                        .findById(itemReq.getSupermercadoPreferidoId())
-                        .orElseThrow(() -> new RuntimeException("Supermercado no encontrado"));
-                item.setSupermercatPreferit(s);
-            }
+			Producte producte = producteRepo.findById(itemReq.getProductoId())
+					.orElseThrow(() -> new RuntimeException("Producto no encontrado"));
 
-            llista.getItems().add(item);
-        }
+			ItemLlista item = new ItemLlista();
+			item.setLlista(llista);
+			item.setProducte(producte);
+			item.setQuantitat(itemReq.getCantidad());
+			item.setUnitat(itemReq.getUnidad());
 
-        return llistaRepo.save(llista);
-    }
-    
+			if (itemReq.getSupermercadoPreferidoId() != null) {
+				Supermercat s = supermercatRepo
+						.findById(itemReq.getSupermercadoPreferidoId())
+						.orElseThrow(() -> new RuntimeException("Supermercado no encontrado"));
+				item.setSupermercatPreferit(s);
+			}
 
-    public List<LlistaDTO> obtenirPubliques() {
-        // Pasamos el Enum como String para el SQL nativo
-        List<Llista> llistes = llistaRepo.findByVisibilitat(Visibilitat.PUBLICA.name());
-        return llistes.stream().map(this::toDTO).collect(Collectors.toList());
-    }
-    
-    public int TotalPrivades() {
-        // Retornamos el tamaño de la lista de privadas para obtener el número total
-        List<Llista> llistes = llistaRepo.findByVisibilitat(Visibilitat.PRIVADA.name());
-        return llistes.size();
-    }
-    
-    
-    public List<Llista> obtenirLlistesUsuari(Long userId) {
-        // Cambiamos UsuariId por UserId para que coincida con el @Query del repositorio
-        return llistaRepo.findByUsuari_UserId(userId);
-    }
-    
-    public LlistaDTO toDTO(Llista llista) {
-        if (llista == null) return null;
+			llista.getItems().add(item);
+		}
 
-        LlistaDTO dto = new LlistaDTO();
-        // Revisa si en la Clase Llista se llama getListaId() o getId()
-        dto.setListaId(llista.getListaId()); 
-        dto.setNombre(llista.getNombre());
-        dto.setDescripcion(llista.getDescripcion());
-        dto.setVisibilitat(Visibilitat.valueOf(llista.getVisibilitat()));
-        dto.setDataCreacio(llista.getDataCreacio());
-        dto.setNomAutor(llista.getUsuari().getUsername());
+		return llistaRepo.save(llista);
+	}
 
-        if (llista.getItems() != null) {
-            List<ItemLlistaDTO> items = llista.getItems().stream().map(item -> {
-                ItemLlistaDTO i = new ItemLlistaDTO();
-                i.setItemId(item.getItemId());
-                i.setProductoId(item.getProducte().getProducteId());
-                i.setNombreProducto(item.getProducte().getNomProducte());
-                i.setCantidad(item.getQuantitat());
-                i.setUnidad(item.getUnitat());
-                i.setMarcada(item.isMarcada());
-                
-                if (item.getSupermercatPreferit() != null) {
-                    i.setSupermercadoPreferidoId(item.getSupermercatPreferit().getSupermercatId());
-                }
-                return i;
-            }).toList();
-            dto.setItems(items);
-        }
-        return dto;
-    }
-    
-    
- // Contadores para el panel
-    public Map<String, Long> estadistiquesUsuari(Long userId) {
-        return Map.of(
-            "publiques", llistaRepo.countByUsuari_UserIdAndVisibilitat(userId, Visibilitat.PUBLICA.name()),
-            "privades", llistaRepo.countByUsuari_UserIdAndVisibilitat(userId, Visibilitat.PRIVADA.name())
-        );
-    }
-    
 
-    public void eliminarLlistaSegura(Long llistaId, Long usuariId) {
-        // CAMBIA LlistaRepository por llistaRepo
-        llistaRepo.deleteByIdAndUsuariId(llistaId, usuariId);
-    }
-    
-    
+	/**
+	 * Metode per obtenir les llistes publiques
+	 * @return Llista de llistes
+	 */
+
+	public List<LlistaDTO> obtenirPubliques() {
+		// Pasamos el Enum como String para el SQL nativo
+		List<Llista> llistes = llistaRepo.findByVisibilitat(Visibilitat.PUBLICA.name());
+		return llistes.stream().map(this::toDTO).collect(Collectors.toList());
+	}
+
+	/**
+	 * Metode per obtenir el nombre total de llistes privades
+	 * @return Numero de llistes
+	 */
+
+	public int TotalPrivades() {
+		// Retornamos el tamaño de la lista de privadas para obtener el número total
+		List<Llista> llistes = llistaRepo.findByVisibilitat(Visibilitat.PRIVADA.name());
+		return llistes.size();
+	}
+
+	/**
+	 * Metode per obtenir les llistes d'un usuari
+	 * @param userId
+	 * @return Llista de llistes
+	 */
+	public List<Llista> obtenirLlistesUsuari(Long userId) {
+		// Cambiamos UsuariId por UserId para que coincida con el @Query del repositorio
+		return llistaRepo.findByUsuari_UserId(userId);
+	}
+
+	/**
+	 * Metode per passar una llista a DTO
+	 * @param llista
+	 * @return
+	 */
+	public LlistaDTO toDTO(Llista llista) {
+		if (llista == null) return null;
+
+		LlistaDTO dto = new LlistaDTO();
+		// Revisa si en la Clase Llista se llama getListaId() o getId()
+		dto.setListaId(llista.getListaId()); 
+		dto.setNombre(llista.getNombre());
+		dto.setDescripcion(llista.getDescripcion());
+		dto.setVisibilitat(Visibilitat.valueOf(llista.getVisibilitat()));
+		dto.setDataCreacio(llista.getDataCreacio());
+		dto.setNomAutor(llista.getUsuari().getUsername());
+
+		if (llista.getItems() != null) {
+			List<ItemLlistaDTO> items = llista.getItems().stream().map(item -> {
+				ItemLlistaDTO i = new ItemLlistaDTO();
+				i.setItemId(item.getItemId());
+				i.setProductoId(item.getProducte().getProducteId());
+				i.setNombreProducto(item.getProducte().getNomProducte());
+				i.setCantidad(item.getQuantitat());
+				i.setUnidad(item.getUnitat());
+				i.setMarcada(item.isMarcada());
+
+				if (item.getSupermercatPreferit() != null) {
+					i.setSupermercadoPreferidoId(item.getSupermercatPreferit().getSupermercatId());
+				}
+				return i;
+			}).toList();
+			dto.setItems(items);
+		}
+		return dto;
+	}
+
+
+	/**
+	 * Metode per coneixer el nombre total dellistes d ecada tipus d'un usari
+	 * @param userId
+	 * @return Mapa amb el nombre de llistes (publiques i privades)
+	 */
+	public Map<String, Long> estadistiquesUsuari(Long userId) {
+		return Map.of(
+				"publiques", llistaRepo.countByUsuari_UserIdAndVisibilitat(userId, Visibilitat.PUBLICA.name()),
+				"privades", llistaRepo.countByUsuari_UserIdAndVisibilitat(userId, Visibilitat.PRIVADA.name())
+				);
+	}
+
+	/**
+	 * Metode per eliminar una llista d'un usari
+	 * @param llistaId
+	 * @param usuariId
+	 */
+	public void eliminarLlistaSegura(Long llistaId, Long usuariId) {
+		llistaRepo.deleteByIdAndUsuariId(llistaId, usuariId);
+	}
+
+
 }

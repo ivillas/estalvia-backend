@@ -2,15 +2,20 @@ package cat.estalvia.dto;
 
 import java.math.BigDecimal;
 
+/**
+ * DTO dels items de les llistes
+ * Per asocia els productes a les llistes
+ */
+
 public class ItemLlistaDTO {
 
-    private Long itemId;
-    private Long productoId;
-    private String nombreProducto;
-    private BigDecimal cantidad;
-    private String unidad;
-    private boolean marcada;
-    private Long supermercadoPreferidoId;
+	private Long itemId;
+	private Long productoId;
+	private String nombreProducto;
+	private BigDecimal cantidad;
+	private String unidad;
+	private boolean marcada;
+	private Long supermercadoPreferidoId;
 	public Long getItemId() {
 		return itemId;
 	}
@@ -54,7 +59,7 @@ public class ItemLlistaDTO {
 		this.supermercadoPreferidoId = supermercadoPreferidoId;
 	}
 
-    // getters & setters
-    
-    
+	// getters & setters
+
+
 }

@@ -2,20 +2,23 @@ package cat.estalvia.dto;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
 import cat.estalvia.entity.Visibilitat;
+
+/**
+ * DTO per les llistes
+ */
 
 public class LlistaDTO {
 
-    private Long listaId;
-    private String nombre;
-    private String descripcion;
-    private Visibilitat visibilitat;
-    private LocalDateTime dataCreacio;
-    private List<ItemLlistaDTO> items;
-    private String nomAutor;
-    
-    
+	private Long listaId;
+	private String nombre;
+	private String descripcion;
+	private Visibilitat visibilitat;
+	private LocalDateTime dataCreacio;
+	private List<ItemLlistaDTO> items;
+	private String nomAutor;
+
+
 	public Long getListaId() {
 		return listaId;
 	}
@@ -59,10 +62,10 @@ public class LlistaDTO {
 		this.nomAutor = nomAutor;
 	}
 
-	
 
-    // getters & setters
-    
-    
-    
+
+	// getters & setters
+
+
+
 }

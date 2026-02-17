@@ -11,32 +11,37 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+
+/**
+ * Entitat Itemo Llista
+ */
+
 @Entity
 @Table(
-   name = "item_llista"
-)
+		name = "item_llista"
+		)
 public class ItemLlista {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long itemId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long itemId;
 
-    @ManyToOne
-    @JoinColumn(name = "llista_id", nullable = false) 
-    private Llista llista;
+	@ManyToOne
+	@JoinColumn(name = "llista_id", nullable = false) 
+	private Llista llista;
 
-    @ManyToOne
-    @JoinColumn(name = "producte_id", nullable = false)
-    private Producte producte;
+	@ManyToOne
+	@JoinColumn(name = "producte_id", nullable = false)
+	private Producte producte;
 
-    private BigDecimal quantitat;
-    private String unitat;
+	private BigDecimal quantitat;
+	private String unitat;
 
-    @ManyToOne
-    @JoinColumn(name = "supermercat_preferit_id")
-    private Supermercat supermercatPreferit;
+	@ManyToOne
+	@JoinColumn(name = "supermercat_preferit_id")
+	private Supermercat supermercatPreferit;
 
-    private boolean marcada = false;
+	private boolean marcada = false;
 
 	public Long getItemId() {
 		return itemId;
@@ -93,10 +98,10 @@ public class ItemLlista {
 	public void setMarcada(boolean marcada) {
 		this.marcada = marcada;
 	}
-    
-    
-    // Getters & Setters
-    
-    
-  
+
+
+	// Getters & Setters
+
+
+
 }

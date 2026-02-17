@@ -2,9 +2,9 @@ package cat.estalvia.dto;
 
 public class RegisterRequest {
 
-    private String username;
-    private String email;
-    private String password;
+	private String username;
+	private String email;
+	private String password;
 	public String getUsername() {
 		return username;
 	}
@@ -24,7 +24,7 @@ public class RegisterRequest {
 		this.password = password;
 	}
 
-    // getters & setters
-    
-    
+	// getters & setters
+
+
 }

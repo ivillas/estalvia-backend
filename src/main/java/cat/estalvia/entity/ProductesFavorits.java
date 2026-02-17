@@ -8,18 +8,23 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+
+/**
+ * Entitat Productes Favorits
+ */
+
 //@Entity
 @Table(
-   name = "productes__favorits"
-)
+		name = "productes__favorits"
+		)
 public class ProductesFavorits {
-    @Id
-    @Column(name = "user_id", nullable=false)
-    private Long user_id;
-   
-    @Column(name = "producte_id", nullable=false)
-    private Long producte_id;
-	
+	@Id
+	@Column(name = "user_id", nullable=false)
+	private Long user_id;
+
+	@Column(name = "producte_id", nullable=false)
+	private Long producte_id;
+
 	@Column(name = "data_favorit", nullable=true,unique=false)
 	private LocalDateTime data_favorit;
 
@@ -46,9 +51,9 @@ public class ProductesFavorits {
 	public void setData_favorit(LocalDateTime data_favorit) {
 		this.data_favorit = data_favorit;
 	}
-	
-    
- 
-    
-  
+
+
+
+
+
 }
