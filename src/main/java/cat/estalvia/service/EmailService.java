@@ -15,7 +15,7 @@ public class EmailService {
 
     public void enviarCodiRecuperacio(String to, String codi) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("Estalvia! <estalviaApp@gmail.com>"); 
+        message.setFrom("Estalvia! <correo@correo.com>"); 
         message.setTo(to);
         message.setSubject("Codi de recuperació - EstalviaApp");
         message.setText("El teu codi de recuperació és: " + codi + 
