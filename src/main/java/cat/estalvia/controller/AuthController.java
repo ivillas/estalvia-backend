@@ -9,8 +9,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import cat.estalvia.dto.ChangePasswordRequest;
+import cat.estalvia.dto.ForgotPasswordRequest;
 import cat.estalvia.dto.LoginRequest;
 import cat.estalvia.dto.RegisterRequest;
+import cat.estalvia.dto.ResetPasswordRequest;
 import cat.estalvia.repository.UsuariRepository;
 import cat.estalvia.service.AuthService;
 import cat.estalvia.service.PasswordService;
@@ -56,5 +60,34 @@ public class AuthController {
 		authService.register(req);
 		return ResponseEntity.ok("Usuari creat");
 	}
+	
+	/*
+	 * CANVI DE CONTRASENYA (Usuari loguejat)
+	 */
+	@PostMapping("/change-password")
+	public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest req) {
+		authService.changePassword(req.getUserId(), req.getOldPassword(), req.getNewPassword());
+		return ResponseEntity.ok("Contrasenya actualitzada amb èxit");
+	}
+
+	/*
+	 * RECUPERACIÓ - PAS 1: Sol·licitar codi per Email
+	 */
+	@PostMapping("/forgot-password")
+	public ResponseEntity<?> forgotPassword(@RequestBody ForgotPasswordRequest req) {
+		authService.generateRecoveryCode(req.getEmail());
+		return ResponseEntity.ok("Si l'email existeix, rebràs un codi de recuperació");
+	}
+
+	/*
+	 * RECUPERACIÓ - PAS 2: Validar codi i canviar contrasenya
+	 */
+	@PostMapping("/reset-password")
+	public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest req) {
+		authService.resetPassword(req.getEmail(), req.getCode(), req.getNewPassword());
+		return ResponseEntity.ok("La contrasenya s'ha restablert correctament");
+	}
+	
+	
 }
 

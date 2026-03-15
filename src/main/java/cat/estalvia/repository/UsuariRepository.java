@@ -16,6 +16,8 @@ import cat.estalvia.entity.Usuari;
 @Repository
 public interface UsuariRepository extends JpaRepository<Usuari, Long> {
 
+	Optional<Usuari> findByEmail(String email);
+	 
 	boolean existsByUsername(String username);
 
 	boolean existsByEmail(String email);
