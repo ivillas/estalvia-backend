@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -107,4 +108,17 @@ public class LlistaController {
 		llistaService.eliminarLlistaSegura(id, usuariId);
 		return ResponseEntity.noContent().build();
 	}
+	
+	/**
+	 * Per actualitzar una llista existent
+	 * @param id de la llista a modificar
+	 * @param req dades noves
+	 * @return
+	 */
+	@PutMapping("/{id}")
+	public ResponseEntity<Void> actualizarLlista(@PathVariable Long id, @RequestBody CrearLlistaRequest req) {
+	    llistaService.actualitzarLlista(id, req);
+	    return ResponseEntity.ok().build();
+	}
+	
 }

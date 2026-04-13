@@ -192,5 +192,55 @@ public class LlistaService {
 		llistaRepo.deleteByIdAndUsuariId(llistaId, usuariId);
 	}
 
+	/**
+	 * Mètode per actualitzar una llista existent
+	 * @param llistaId ID de la llista a modificar
+	 * @param req Dades noves
+	 */
+	@Transactional
+	public void actualitzarLlista(Long llistaId, CrearLlistaRequest req) {
+	    // 1. Busquem la llista original o llancem error si no existeix
+	    Llista llista = llistaRepo.findById(llistaId)
+	            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Llista no trobada"));
+
+	    // 2. Validem visibilitat
+	    if (req.getVisibilidad() == null || !VISIBILITATS_VALIDES.contains(req.getVisibilidad().name())) {
+	        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Visibilitat inválida");
+	    }
+
+	    // 3. Actualitzem els camps bàsics
+	    llista.setNombre(req.getNombre());
+	    llista.setDescripcion(req.getDescripcion());
+	    llista.setVisibilitat(req.getVisibilidad().name());
+
+	    // 4. Actualitzem els productes
+	    llista.getItems().clear();
+	    
+	    // AFEGEIX AQUESTA LÍNIA AQUÍ: Això força el borrat immediat per evitar duplicats
+	    llistaRepo.saveAndFlush(llista); 
+
+	    for (ItemLlistaRequest itemReq : req.getItems()) {
+	        Producte producte = producteRepo.findById(itemReq.getProductoId())
+	                .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+
+	        ItemLlista item = new ItemLlista();
+	        item.setLlista(llista);
+	        item.setProducte(producte);
+	        item.setQuantitat(itemReq.getCantidad());
+	        item.setUnitat(itemReq.getUnidad());
+
+	        if (itemReq.getSupermercadoPreferidoId() != null) {
+	            Supermercat s = supermercatRepo.findById(itemReq.getSupermercadoPreferidoId())
+	                    .orElseThrow(() -> new RuntimeException("Supermercado no encontrado"));
+	            item.setSupermercatPreferit(s);
+	        }
+
+	        llista.getItems().add(item);
+	    }
+
+	    // 5. Guardem els canvis definitius
+	    llistaRepo.save(llista);
+	}
 
 }
+
