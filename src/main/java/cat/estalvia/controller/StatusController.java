@@ -71,7 +71,7 @@ public class StatusController {
 
 	            Map<String, Object> response = new HashMap<>();
 	            response.put("versionName", versionName);
-	            response.put("downloadUrl", "ip_server" + latestApk.getName());
+	            response.put("downloadUrl", "http://estalvia.ddns.net:8081/api/status/download/" + latestApk.getName());
 	            return response;
 	        }
 	        return null; 
