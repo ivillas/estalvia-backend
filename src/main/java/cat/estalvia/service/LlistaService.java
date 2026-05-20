@@ -107,7 +107,6 @@ public class LlistaService {
 	 */
 
 	public List<LlistaDTO> obtenirPubliques() {
-		// Pasamos el Enum como String para el SQL nativo
 		List<Llista> llistes = llistaRepo.findByVisibilitat(Visibilitat.PUBLICA.name());
 		return llistes.stream().map(this::toDTO).collect(Collectors.toList());
 	}
@@ -118,7 +117,6 @@ public class LlistaService {
 	 */
 
 	public int TotalPrivades() {
-		// Retornamos el tamaño de la lista de privadas para obtener el número total
 		List<Llista> llistes = llistaRepo.findByVisibilitat(Visibilitat.PRIVADA.name());
 		return llistes.size();
 	}
@@ -129,7 +127,7 @@ public class LlistaService {
 	 * @return Llista de llistes
 	 */
 	public List<Llista> obtenirLlistesUsuari(Long userId) {
-		// Cambiamos UsuariId por UserId para que coincida con el @Query del repositorio
+		
 		return llistaRepo.findByUsuari_UserId(userId);
 	}
 
@@ -142,7 +140,6 @@ public class LlistaService {
 		if (llista == null) return null;
 
 		LlistaDTO dto = new LlistaDTO();
-		// Revisa si en la Clase Llista se llama getListaId() o getId()
 		dto.setListaId(llista.getListaId()); 
 		dto.setNombre(llista.getNombre());
 		dto.setDescripcion(llista.getDescripcion());
@@ -199,24 +196,23 @@ public class LlistaService {
 	 */
 	@Transactional
 	public void actualitzarLlista(Long llistaId, CrearLlistaRequest req) {
-	    // 1. Busquem la llista original o llancem error si no existeix
+	    // Busquem la llista original o llancem error si no existeix
 	    Llista llista = llistaRepo.findById(llistaId)
 	            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Llista no trobada"));
 
-	    // 2. Validem visibilitat
+	    // Validem visibilitat
 	    if (req.getVisibilidad() == null || !VISIBILITATS_VALIDES.contains(req.getVisibilidad().name())) {
 	        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Visibilitat inválida");
 	    }
 
-	    // 3. Actualitzem els camps bàsics
+	    // Actualitzem els camps bàsics
 	    llista.setNombre(req.getNombre());
 	    llista.setDescripcion(req.getDescripcion());
 	    llista.setVisibilitat(req.getVisibilidad().name());
 
-	    // 4. Actualitzem els productes
+	    // Actualitzem els productes
 	    llista.getItems().clear();
 	    
-	    // AFEGEIX AQUESTA LÍNIA AQUÍ: Això força el borrat immediat per evitar duplicats
 	    llistaRepo.saveAndFlush(llista); 
 
 	    for (ItemLlistaRequest itemReq : req.getItems()) {
@@ -238,7 +234,7 @@ public class LlistaService {
 	        llista.getItems().add(item);
 	    }
 
-	    // 5. Guardem els canvis definitius
+	    //  Guardem els canvis definitius
 	    llistaRepo.save(llista);
 	}
 

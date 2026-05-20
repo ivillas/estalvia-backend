@@ -31,7 +31,7 @@ public class Llista {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "llista_id") // <-- AÑADE ESTO para que coincida con la DB
+	@Column(name = "llista_id") 
 	private Long listaId;
 
 	@Column(name = "nom_llista", nullable = false)

@@ -4,7 +4,7 @@ public class LoginRequest {
 	private String username;
 	private String password;
 
-	// Constructor vacío (necesario para Jackson/Spring)
+	// Constructor buid
 	public LoginRequest() {}
 
 	// Getters y Setters

@@ -16,7 +16,7 @@ public class UsuariDTO {
 	private String email;
 	private String dataCreacio; 
 
-	// Constructor vacío para Jackson
+	// Constructor buit
 	public UsuariDTO() {}
 
 	// Getters y Setters

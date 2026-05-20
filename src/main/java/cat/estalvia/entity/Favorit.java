@@ -24,7 +24,7 @@ public class Favorit {
 		this.dataFavorit = LocalDateTime.now();
 	}
 
-	// --- CLASE PARA LA CLAVE COMPUESTA ---
+	// --- clase per la clau composta ---
 	@Embeddable
 	public static class FavoritId implements Serializable {
 		@Column(name = "user_id")

@@ -31,7 +31,7 @@ public class ProducteService {
 		List<Object[]> results = this.repository.findAllWithPrices();
 
 		for (Object[] row : results) {
-			Long id = (Long) row[0]; // Usamos el nombre del campo en la clase Producte
+			Long id = (Long) row[0]; 
 
 			ProductePreusDTO dto = map.computeIfAbsent(id, k -> {
 				ProductePreusDTO d = new ProductePreusDTO();
@@ -40,8 +40,6 @@ public class ProducteService {
 				d.setNombre((String) row[2]);
 				d.setUnidad((String) row[3]);
 				d.setPack((String) row[4]);
-
-				// Campos nuevos
 				d.setDescripcio((String) row[7]);
 				d.setImatge((String) row[8]);
 				d.setLastUpdate((java.time.LocalDateTime) row[9]);
